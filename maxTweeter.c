@@ -4,7 +4,6 @@
 #include <math.h>
 
 static int SIZE = 20000;  //size will not exceed 20k
-
 struct tweeter {  //data of pair
     char name[56];
     int tweetCount;
@@ -149,6 +148,8 @@ int main(int argc, char** argv){
 
   bubbleSort(table);
   for (int i = 0; i < 10; i++){
+    if (table[i].data.tweetCount == 0)
+      break;
     printf("%s: %d\n",table[i].key,table[i].data.tweetCount);
   }
 
