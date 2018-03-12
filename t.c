@@ -27,8 +27,8 @@ int hashf(char* name){
 
 //function
 int put(struct pair* table,char* name){
-  printf("start put ");
-  printf("%s %d\n",name,hashf(name));
+  //printf("start put ");
+  //printf("%s %d\n",name,hashf(name));
   int hash = hashf(name);
   if (!strcmp(table[hash].key,name)){  //result of hash has same name
     table[hash].data.tweetCount++;     //increase the count
@@ -87,6 +87,19 @@ char* getName(char* parse, int location){
 	return token;
 }
 
+//bubble sort, but only the first 10
+int bubbleSort(struct pair* table){
+  for (int i = 0; i< 10; i++){
+    for (int j = i+1; j < SIZE; j++){
+      if (table[i].data.tweetCount < table[j].data.tweetCount){
+        struct pair temp = table[i];
+        table[i] = table[j];
+        table[j] = temp;
+      }
+    }
+  }
+}
+
 int main(int argc, char** argv){
   //checks
   if (argc != 2){
@@ -120,10 +133,10 @@ int main(int argc, char** argv){
     put(table,curr);
   }
 
-  for (int i = 0; i < SIZE; i++){
-    if (table[i].data.tweetCount != 0){
-      printf("%s %d\n",table[i].key,table[i].data.tweetCount);
-    }
+  bubbleSort(table);
+  for (int i = 0; i < 10; i++){
+    printf("%s %d\n",table[i].key,table[i].data.tweetCount);
   }
+
 
 }
