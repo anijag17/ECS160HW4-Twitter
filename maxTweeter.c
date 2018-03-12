@@ -4,6 +4,7 @@
 #include <math.h>
 
 static int SIZE = 20000;  //size will not exceed 20k
+static int numCols = 0;
 struct tweeter {  //data of pair
     char name[56];
     int tweetCount;
@@ -146,11 +147,8 @@ int main(int argc, char** argv){
       continue;
     }
     curr = getName(parse,location);
-    if (curr == NULL){
-      printf("Invalid Input Format\n");
-      return -1;
-    }
-    put(table,curr);
+    if (curr != NULL)
+      put(table,curr);
   }
 
   bubbleSort(table);
