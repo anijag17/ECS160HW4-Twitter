@@ -136,7 +136,7 @@ int main(int argc, char** argv){
 
   bubbleSort(table);
   for (int i = 0; i < 10; i++){
-    printf("%s %d\n",table[i].key,table[i].data.tweetCount);
+    printf("%s: %d\n",table[i].key,table[i].data.tweetCount);
   }
 
 
