@@ -83,7 +83,6 @@ char* getName(char* parse, int location){
       return NULL;
     }
 	}
-  printf("name is: %s\n",token);
 	//printf("n: %s\n",token);
 	return token;
 }
