@@ -1,16 +1,17 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 static int SIZE = 20000;  //size will not exceed 20k
 
 struct tweeter {  //data
-    char name[16];
+    char name[56];
     int tweetCount;
 };
 
 struct pair {
-  char key[16];
+  char key[56];
   struct tweeter data;
 };
 
@@ -19,27 +20,32 @@ int hashf(char* name){
   int size = strlen(name);
   int hash = 7;
   for (int i = 0; i < size; i++) {
-    hash = hash*31 + name[i];
+    hash = hash*31 + (int)name[i];
   }
-  return hash%SIZE;
+  return abs(hash%SIZE);
 }
 
 //function
-int put(struct pair* table[SIZE],char* name){
+int put(struct pair* table,char* name){
+  printf("start put ");
+  printf("%s %d\n",name,hashf(name));
   int hash = hashf(name);
-  if (!strcmp(table[hash]->key,name)){  //result of hash has same name
-    table[hash]->data.tweetCount++;     //increase the count
+  if (!strcmp(table[hash].key,name)){  //result of hash has same name
+    table[hash].data.tweetCount++;     //increase the count
+    return 0;
   }
-  else if (!strcmp(table[hash]->key,"\0")){ //bucket has not been initialized
-    strcpy(table[hash]->key,name);
-    strcpy(table[hash]->data.name,name);
-    table[hash]->data.tweetCount++;
+  else if (!strcmp(table[hash].key,"\0")){ //bucket has not been initialized
+    strcpy(table[hash].key,name);
+    strcpy(table[hash].data.name,name);
+    table[hash].data.tweetCount++;
+    return 0;
   }
   else {  //collision :(
     /* todo */
     //int inc = hash++;
     //while (!strcmp(*table[inc].key.name,))
     printf("collision\n");
+    exit(1);
     return -1;
   }
 }
@@ -72,6 +78,23 @@ char* getName(char* parse, int location){
 }
 
 int main(int argc, char** argv){
+  //checks
+  if (argc != 2){
+		return -1;
+	}
+	FILE *fp=fopen(argv[1], "r");
+	if (fp == NULL){
+		return -1;
+	}
+
+	char parse[512];
+	if( fgets (parse, sizeof(parse), fp)==NULL ){
+		return -1;
+	}
+  int location = getTweeterLocation(parse);
+  if (location == -1)
+    return -1;
+  //end of checks
   struct pair table[SIZE];
   struct pair init;
   strcpy(init.key,"\0");
@@ -80,6 +103,12 @@ int main(int argc, char** argv){
   for (int i = 0; i < SIZE; i++){
     table[i] = init;
   }
-
+  //table initialized
+  char* curr;
+  while (fgets(parse,sizeof(parse),fp)!= NULL){
+    curr = getName(parse,location);
+    put(table,curr);
+    printf("finish put\n");
+  }
 
 }
