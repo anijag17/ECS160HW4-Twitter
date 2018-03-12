@@ -79,7 +79,11 @@ char* getName(char* parse, int location){
 	token = strtok(parse,",");
 	for (int i = 0; i < location; i++){
 		token = strtok(NULL,",");
+    if (token == NULL){
+      return NULL;
+    }
 	}
+  printf("name is: %s\n",token);
 	//printf("n: %s\n",token);
 	return token;
 }
@@ -143,6 +147,10 @@ int main(int argc, char** argv){
       continue;
     }
     curr = getName(parse,location);
+    if (curr == NULL){
+      printf("Invalid Input Format\n");
+      return -1;
+    }
     put(table,curr);
   }
 
