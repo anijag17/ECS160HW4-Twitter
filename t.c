@@ -42,11 +42,21 @@ int put(struct pair* table,char* name){
   }
   else {  //collision :(
     /* todo */
-    //int inc = hash++;
-    //while (!strcmp(*table[inc].key.name,))
-    printf("collision\n");
-    exit(1);
-    return -1;
+    int inc = hash++;
+    while (strcmp(table[inc].key,name)){ //while they do not equal each other, check gthe next one
+      if (table[inc].data.tweetCount == 0){ //if it is empty,place in this bucket
+        strcpy(table[inc].key,name);
+        strcpy(table[inc].data.name,name);
+        table[inc].data.tweetCount++;
+        return 0;
+      }
+      else inc++;
+    }
+    //found here
+    strcpy(table[inc].key,name);
+    strcpy(table[inc].data.name,name);
+    table[inc].data.tweetCount++;
+    return 0;
   }
 }
 
@@ -108,7 +118,12 @@ int main(int argc, char** argv){
   while (fgets(parse,sizeof(parse),fp)!= NULL){
     curr = getName(parse,location);
     put(table,curr);
-    printf("finish put\n");
+  }
+
+  for (int i = 0; i < SIZE; i++){
+    if (table[i].data.tweetCount != 0){
+      printf("%s %d\n",table[i].key,table[i].data.tweetCount);
+    }
   }
 
 }
